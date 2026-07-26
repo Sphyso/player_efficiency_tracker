@@ -1,0 +1,27 @@
+# Python / Virtual Environment
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Environment Variables & Secrets
+.env
+*.env
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Data Lake Local Landing / Logs
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+logs/
+*.log
+
+# dbt Artifacts
+target/
+dbt_packages/
