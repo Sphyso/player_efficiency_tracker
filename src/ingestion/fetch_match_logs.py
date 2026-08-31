@@ -1,29 +1,29 @@
 import pandas as pd
+from pathlib import Path
 from statsbombpy import sb
 
-# Testing Game:
-# competition_id=43, season_id=106
-# match_id=3857298
+# Config: values used to get competition/season/match
+COMPETITION_ID = 43     # FIFA World Cup
+SEASON_ID = 106         # 2022
+MATCH_ID = 3857298      # Portugal vs Ghana
 
-# Tells Pandas to show every single row and column
-pd.set_option('display.max_rows', None)
-pd.set_option('display.max_columns', None)
-pd.set_option('display.width', 1000)        # Prevents columns from wrapping to a new line
-pd.set_option('display.max_colwidth', None)
+RAW_DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "raw"
 
-competitions = sb.competitions()
-# print(competitions)
+def get_competitions() -> pd.DataFrame:
+    return sb.competitions()
 
-matches_2022_wc = sb.matches(competition_id=43, season_id=106)
-clean_matches = matches_2022_wc[[
-    'match_id',
-    'match_date', 
-    'home_team', 
-    'away_team', 
-]].sort_values(by='match_date')
+def get_matches(competition_id, season_id) -> pd.DataFrame:
+    matches = sb.matches(competition_id = competition_id, season_id = season_id)
+    matches["score"] = matches["home_score"].astype(str) + " - " + matches["away_score"].astype(str)
+    return matches[["match_id", "match_date", "home_team", "away_team", "score"]].sort_values(by="match_date")
 
-# print(clean_matches)
+def get_match_events(match_id) -> pd.DataFrame:
+    return sb.events(match_id = match_id)
 
-por_gha = sb.events(match_id=3857298)
+def main():
+    events = get_match_events(MATCH_ID)
+    matches = get_matches(COMPETITION_ID, SEASON_ID)
+    print(matches)
 
-print(por_gha)
+if __name__ == "__main__":
+    main()
