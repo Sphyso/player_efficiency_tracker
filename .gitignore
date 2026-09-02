@@ -26,3 +26,5 @@ logs/
 # dbt Artifacts
 target/
 dbt_packages/
+
+api_key.txt
