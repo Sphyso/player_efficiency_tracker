@@ -3,9 +3,9 @@ from pathlib import Path
 from statsbombpy import sb
 
 # Config: values used to get competition/season/match
-COMPETITION_ID = 43     # FIFA World Cup
-SEASON_ID = 106         # 2022
-MATCH_ID = 3857298      # Portugal vs Ghana
+COMPETITION_ID = 55     # Euro
+SEASON_ID = 282         # 2024
+MATCH_ID = 3888706      # Portugal vs Hungry
 
 RAW_DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "raw"
 

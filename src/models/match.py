@@ -14,6 +14,7 @@ class PlayerMatchStats(BaseModel):
     player_id: int
     player_name: str
     team_id: int
+    match_id: int
     is_substitute: bool
     minutes_played: Optional[int] = None
     position: Optional[str] = None
@@ -27,6 +28,7 @@ class PlayerMatchStats(BaseModel):
 class MatchEvent(BaseModel):
     event_type: EventType
     team_id: int
+    match_id: int
     time_elapsed: int = Field(ge=0, le=130)
     time_extra: Optional[int] = None
     primary_player_id: Optional[int] = None
