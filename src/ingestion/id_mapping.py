@@ -35,3 +35,29 @@ def resolve_canonical_match_id(statsbomb_match_id: int) -> int:
         )
     
     return row.iloc[0]["match_id"]
+
+
+def resolve_canonical_match_id_api_football(api_football_fixture_id: int) -> int:
+    """
+    Resolve an API-Football fixture_id to our canonical match_id.
+
+    Args:
+        api_football_fixture_id: The API-Football fixture ID from raw JSON
+
+    Returns:
+        The canonical match_id for our schema
+
+    Raises:
+        ValueError: If api_football_fixture_id is not in the mapping table
+    """
+
+    mapping = _load_mapping()
+    row = mapping[mapping["api_football_fixture_id"] == api_football_fixture_id]
+
+    if row.empty:
+        raise ValueError(
+            f"API-Football fixture_id {api_football_fixture_id} not found in mapping table. "
+            f"Add it to data/reference/match_id_mapping.csv before ingesting."
+        )
+
+    return row.iloc[0]["match_id"]
