@@ -24,7 +24,9 @@ async def build_mapping_csv(api_key: str):
     if len(fixtures) != 51:
         print(f"WARNING: expected 51 Euro 2024 matches, got {len(fixtures)} — check for duplicates or missing games")
 
-    out_path = Path("data/reference/fixture_teams.csv")
+    PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+    out_path = PROJECT_ROOT / "data" / "reference" / "fixture_teams.csv"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w", newline="") as f:
         writer = csv.writer(f)

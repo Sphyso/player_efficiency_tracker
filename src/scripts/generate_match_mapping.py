@@ -27,14 +27,16 @@ async def build_mapping_csv(api_key: str):
     if len(fixtures) != 51:
         print(f"WARNING: expected 51 Euro 2024 matches, got {len(fixtures)} — check for duplicates or missing games")
 
-    out_path = Path("data/reference/match_id_mapping.csv")
+    PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+    out_path = PROJECT_ROOT / "data" / "reference" / "match_id_mapping.csv"
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     with open(out_path, "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(["match_id", "api_football_fixture_id", "statsbomb_match_id", "statsbomb_competition_id", "statsbomb_season_id"])
         for i, fx in enumerate(fixtures, start=1):
-            writer.writerow([i, fx["fixture"]["id"], "", "", ""])
+            writer.writerow([i, fx["fixture"]["id"], "", "55", "282"])
 
     print(f"Wrote {len(fixtures)} rows to {out_path}")
 
