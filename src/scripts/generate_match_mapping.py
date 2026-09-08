@@ -1,7 +1,9 @@
 import asyncio
 import httpx
 import csv
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 
 async def build_mapping_csv(api_key: str):
@@ -42,5 +44,6 @@ async def build_mapping_csv(api_key: str):
 
 
 if __name__ == "__main__":
-    api_key = Path("api_key.txt").read_text().strip()
+    load_dotenv()
+    api_key = os.environ["API_KEY"]
     asyncio.run(build_mapping_csv(api_key))
