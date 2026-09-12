@@ -1,5 +1,7 @@
+import os
 from pathlib import Path
 import pandas as pd
+import csv
 
 # Load once at module level
 _MAPPING_TABLE = None
@@ -61,3 +63,27 @@ def resolve_canonical_match_id_api_football(api_football_fixture_id: int) -> int
         )
 
     return row.iloc[0]["match_id"]
+
+
+def resolve_fixture_id(match_id: int) -> int:
+    """canonical match_id -> api_football_fixture_id, for the live path."""
+    with open("data/reference/match_id_mapping.csv") as f:
+        for row in csv.DictReader(f):
+            if int(row["match_id"]) == match_id:
+                return int(row["api_football_fixture_id"])
+    raise ValueError(f"No api_football_fixture_id mapped for match_id={match_id}")
+
+
+def resolve_json_path(match_id: int) -> str:
+    """canonical match_id -> local StatsBomb JSON path, for the offline path."""
+    with open("data/reference/match_id_mapping.csv") as f:
+        for row in csv.DictReader(f):
+            if int(row["match_id"]) == match_id:
+                statsbomb_match_id = row["statsbomb_match_id"]
+                path = f"data/raw/statsbomb/{statsbomb_match_id}.json"
+                if not os.path.isfile(path):
+                    raise ValueError(
+                        f"Derived path {path} does not exist for match_id={match_id}"
+                    )
+                return path
+    raise ValueError(f"No statsbomb_match_id mapped for match_id={match_id}")
