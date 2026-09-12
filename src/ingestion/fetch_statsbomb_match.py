@@ -5,9 +5,9 @@ from statsbombpy import sb
 # Config: values used to get competition/season/match
 COMPETITION_ID = 55     # Euro
 SEASON_ID = 282         # 2024
-MATCH_ID = 3888706      # Portugal vs Hungry
+MATCH_ID = 3930158      # Portugal vs Hungry
 
-RAW_DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "raw"
+RAW_DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "raw" / "statsbomb"
 
 def get_competitions() -> pd.DataFrame:
     return sb.competitions()
@@ -22,7 +22,7 @@ def get_match_events(match_id) -> pd.DataFrame:
 
 def save_raw_events(events, match_id) -> Path:
     RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = RAW_DATA_DIR / f"match_{match_id}_events.json"
+    out_path = RAW_DATA_DIR / f"{match_id}.json"
     events.to_json(out_path, orient="records", indent=2)
     return out_path
 

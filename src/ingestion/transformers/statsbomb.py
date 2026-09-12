@@ -1,7 +1,7 @@
-import datetime
+from datetime import datetime
 from pathlib import Path
 
-from models.event_type import EventType
+from src.models.event_type import EventType
 from src.models.match import Match, TeamInfo, PlayerMatchStats, MatchEvent
 from src.ingestion.id_mapping import resolve_canonical_match_id
 
@@ -85,3 +85,8 @@ def _extract_statsbomb_events(raw_data: dict, canonical_match_id: int) -> list[M
             # Event type not in EventType enum, skip it
             continue
     return events
+
+
+if __name__ == "__main__":
+    result = ingest_offline(Path("data/raw/statsbomb/match_1145510.json"))
+    print(result)
