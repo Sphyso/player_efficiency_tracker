@@ -18,5 +18,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Define default command
-CMD ["python", "src/ingestion/fetch_match_logs.py"]
+CMD ["python", "-m", "src.ingestion.dispatcher"]
 

@@ -4,11 +4,11 @@ import csv
 
 # Load once at module level
 _MAPPING_TABLE = None
+mapping_path = Path(__file__).parent.parent.parent / "data/reference/match_id_mapping.csv"
 
 def _load_mapping():
     global _MAPPING_TABLE
     if _MAPPING_TABLE is None:
-        mapping_path = Path(__file__).parent.parent.parent / "data/reference/match_id_mapping.csv"
         _MAPPING_TABLE = pd.read_csv(mapping_path)
     return _MAPPING_TABLE
 
@@ -41,7 +41,7 @@ def resolve_canonical_match_id_api_football(api_football_fixture_id: int) -> int
 
 def resolve_fixture_id(match_id: int) -> int:
     """canonical match_id -> api_football_fixture_id, for the live path."""
-    with open("data/reference/match_id_mapping.csv") as f:
+    with open(mapping_path) as f:
         for row in csv.DictReader(f):
             if int(row["match_id"]) == match_id:
                 return int(row["api_football_fixture_id"])
