@@ -18,6 +18,7 @@ pandas==3.0.5
 pandas-stubs==3.0.5.260730
 platformdirs==4.11.5
 pluggy==1.6.0
+psycopg2-binary==2.9.10
 pyarrow==25.0.0
 pydantic==2.13.5
 pydantic_core==2.46.5

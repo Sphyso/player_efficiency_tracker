@@ -3,9 +3,10 @@ import httpx
 from src.models.match import Match, TeamInfo, PlayerMatchStats, MatchEvent
 from src.models.event_type import EventType
 from src.ingestion.id_mapping import resolve_canonical_match_id_api_football
+from src.ingestion.bronze_writer import upsert_raw_match
 
 async def ingest_live(fixture_id: int, api_key: str) -> list[Match]:
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=httpx.Timeout(10.0, connect=5.0)) as client:
         resp = await client.get(
             "https://v3.football.api-sports.io/fixtures",
             params={"id": fixture_id},
@@ -14,6 +15,7 @@ async def ingest_live(fixture_id: int, api_key: str) -> list[Match]:
         data = resp.json()["response"][0]
 
     canonical_match_id = resolve_canonical_match_id_api_football(fixture_id)
+    upsert_raw_match(canonical_match_id, fixture_id, data)
 
     match = Match(
         match_id = canonical_match_id,

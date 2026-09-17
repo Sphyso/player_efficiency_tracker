@@ -36,7 +36,7 @@ def resolve_canonical_match_id_api_football(api_football_fixture_id: int) -> int
             f"Add it to data/reference/match_id_mapping.csv before ingesting."
         )
 
-    return row.iloc[0]["match_id"]
+    return int(row.iloc[0]["match_id"])
 
 
 def resolve_fixture_id(match_id: int) -> int:
