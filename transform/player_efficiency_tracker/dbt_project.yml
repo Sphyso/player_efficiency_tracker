@@ -33,3 +33,5 @@ models:
   player_efficiency_tracker:
     staging:
       +schema: silver
+    gold:
+       +materialized: table

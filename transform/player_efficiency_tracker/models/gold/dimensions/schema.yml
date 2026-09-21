@@ -1,0 +1,13 @@
+   models:
+     - name: dim_teams
+       columns:
+         - name: team_id
+           tests: [not_null, unique]
+     - name: dim_players
+       columns:
+         - name: player_id
+           tests: [not_null, unique]
+     - name: dim_matches
+       columns:
+         - name: match_id
+           tests: [not_null, unique]
