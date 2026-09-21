@@ -1,0 +1,84 @@
+version: 2
+
+models:
+  - name: fact_player_match_stats
+    description: >
+      One row per player per match. The efficiency table — source for
+      goals_assists_per_90. Grain: (player_id, match_id).
+    columns:
+      - name: player_id
+        description: FK to dim_players.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_players')
+              field: player_id
+
+      - name: match_id
+        description: FK to dim_matches.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_matches')
+              field: match_id
+
+      - name: team_id
+        description: FK to dim_teams — the team the player was fielded for in this match.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_teams')
+              field: team_id
+
+      - name: goals_assists_per_90
+        description: (goals + assists) * 90 / minutes_played, NULLIF-guarded on minutes_played.
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - player_id
+            - match_id
+
+  - name: fact_match_events
+    description: >
+      One row per match event (goal, card, sub, etc.). Grain: event_id.
+      Source for disciplinary aggregates.
+    columns:
+      - name: event_id
+        description: Surrogate/natural key, one per event.
+        tests:
+          - not_null
+          - unique
+
+      - name: match_id
+        description: FK to dim_matches.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_matches')
+              field: match_id
+
+      - name: team_id
+        description: FK to dim_teams — the team associated with the event.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_teams')
+              field: team_id
+
+      - name: primary_player_id
+        description: >
+          FK to dim_players. Nullable — some event types (e.g. certain
+          stoppage or team-level events) have no single attributable player.
+        tests:
+          - relationships:
+              to: ref('dim_players')
+              field: player_id
+              config:
+                where: "primary_player_id is not null"
+
+      - name: event_type
+        description: Category of event.
+        tests:
+          - accepted_values:
+              values: ['goal', 'yellow_card', 'red_card', 'substitution', 'foul']
