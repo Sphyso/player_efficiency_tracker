@@ -3,10 +3,10 @@
 with events as (
     select
         match_id,
-        ordinality as event_seq,
-        event
+        t.ordinality as event_seq,
+        t.event       as event
     from {{ source('bronze', 'raw_matches') }},
-    jsonb_array_elements(raw_payload -> 'events') with ordinality as event
+    jsonb_array_elements(raw_payload -> 'events') with ordinality as t(event, ordinality)
 )
 select
     match_id,
@@ -19,4 +19,4 @@ select
     (event -> 'player' ->> 'id')::int          as primary_player_id,
     (event -> 'assist' ->> 'id')::int          as secondary_player_id
 from events
-where event ->> 'type' in ('Card', 'Goal', 'subst', 'Var')  -- keeping this list in sync with EventType manually for now
+where event ->> 'type' in ('Card', 'Goal', 'subst', 'Var')

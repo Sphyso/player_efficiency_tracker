@@ -15,4 +15,4 @@ def get_matches(match_ids: list[int]) -> list[Match]:
 
 
 if __name__ == "__main__":
-    print(get_matches([7]))
+    print(get_matches([2]))
