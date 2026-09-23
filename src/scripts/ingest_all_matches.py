@@ -1,6 +1,8 @@
 import csv
 import psycopg2  # swap for whatever connection pattern the rest of the project uses
 from src.ingestion.dispatcher import get_matches
+from src.config import DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
+from pathlib import Path
 
 def load_all_match_ids(csv_path: str) -> list[int]:
     with open(csv_path) as f:
@@ -12,9 +14,18 @@ def get_already_ingested(conn) -> set[int]:
         return {row[0] for row in cur.fetchall()}
 
 if __name__ == "__main__":
-    all_ids = load_all_match_ids("data/reference/match_id_mapping.csv")
+    PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-    conn = psycopg2.connect(...)  # your actual connection details
+    out_path = PROJECT_ROOT / "data" / "reference" / "match_id_mapping.csv"
+    all_ids = load_all_match_ids(out_path)
+
+    conn = psycopg2.connect(
+        host=DB_HOST,
+        port=DB_PORT,
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
+    )
     already_done = get_already_ingested(conn)
     conn.close()
 
