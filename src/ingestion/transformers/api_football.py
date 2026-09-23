@@ -4,9 +4,11 @@ from src.models.match import Match, TeamInfo, PlayerMatchStats, MatchEvent
 from src.models.event_type import EventType
 from src.ingestion.id_mapping import resolve_canonical_match_id_api_football
 from src.ingestion.bronze_writer import upsert_raw_match
+from src.ingestion.rate_limiter import api_football_limiter
 
 async def ingest_live(fixture_id: int, api_key: str) -> list[Match]:
     async with httpx.AsyncClient(timeout=httpx.Timeout(10.0, connect=5.0)) as client:
+        await api_football_limiter.acquire()
         resp = await client.get(
             "https://v3.football.api-sports.io/fixtures",
             params={"id": fixture_id},
