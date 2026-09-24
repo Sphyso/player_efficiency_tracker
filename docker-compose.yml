@@ -32,5 +32,23 @@ services:
       DB_USER: postgres
       DB_PASSWORD: postgres
 
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: euro24_db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./src/dashboard:/app/dashboard
+
 volumes:
   pgdata:
