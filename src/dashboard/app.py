@@ -119,7 +119,7 @@ def get_leaderboard(teams, positions, min_minutes):
     """
 
     params = {**team_params, **pos_params, "min_minutes": min_minutes}
-    return conn.query(query, params=params, ttl="10m")
+    return conn.query(query, params=params, ttl="10m", dtype_backend="numpy_nullable")
 
 
 st.set_page_config(page_title="WC Player Efficiency Tracker", layout="wide")
