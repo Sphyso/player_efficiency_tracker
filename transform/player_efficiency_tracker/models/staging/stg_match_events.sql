@@ -20,3 +20,5 @@ select
     (event -> 'assist' ->> 'id')::int          as secondary_player_id
 from events
 where event ->> 'type' in ('Card', 'Goal', 'subst', 'Var')
+  and not (event ->> 'type' = 'Goal' and event ->> 'detail' = 'Missed Penalty')
+  and coalesce(event ->> 'comments', '') != 'Penalty Shootout'

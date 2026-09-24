@@ -6,7 +6,7 @@ select
     secondary_player_id as related_player_id,
     case
         when event_type_raw = 'Goal' and event_detail_raw ilike '%own%'     then 'own_goal'
-        when event_type_raw = 'Goal' and event_detail_raw ilike '%penalty%' then 'penalty_goal'
+        when event_type_raw = 'Goal' and event_detail_raw ilike '%penalty%' then 'goal'
         when event_type_raw = 'Goal'                                        then 'goal'
         when event_type_raw = 'Card' and event_detail_raw ilike '%red%'    then 'red_card'
         when event_type_raw = 'Card' and event_detail_raw ilike '%yellow%' then 'yellow_card'
