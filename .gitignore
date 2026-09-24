@@ -26,4 +26,8 @@ logs/
 target/
 dbt_packages/
 
+# API Key
 api_key.txt
+
+# Streamlit
+.streamlit/secrets.toml

@@ -36,3 +36,6 @@ typing-inspection==0.4.4
 typing_extensions==4.16.0
 url-normalize==3.0.0
 urllib3==2.7.0
+streamlit
+sqlalchemy
+psycopg2-binary
